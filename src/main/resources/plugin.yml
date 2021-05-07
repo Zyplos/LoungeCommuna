@@ -3,6 +3,35 @@ version: ${project.version}
 main: dev.zyplos.loungecommuna.LoungeCommuna
 api-version: 1.16
 prefix: Communa
-authors: [ Zyplos ]
+author: Zyplos
 description: Simple land claims plugin.
 website: https://lounge.haus
+commands:
+  claim:
+    description: Claim the chunk you are in.
+    usage: /<command>
+    permission: communa.use
+  pixels:
+    description: image test
+    usage: /<command>
+    permission: communa.use
+  devspace:
+    description: Flips a coin.
+    usage: /<command>
+    permission: communa.admin
+  crashma:
+    description: crashma? what is that? whats crashma
+    usage: /<command>
+    permission: communa.use
+
+permissions:
+  #  communa.*:
+  #    description: Access to all Communa admin commands and use of the plugin.
+  #    children:
+  #      communa.use: true
+  communa.use:
+    description: Allows you to use the Communa plugin.
+    default: true
+  communa.admin:
+    description: Allows you to use debug Communa commands.
+    default: op
