@@ -1,0 +1,8 @@
+name: LoungeCommuna
+version: ${project.version}
+main: dev.zyplos.loungecommuna.LoungeCommuna
+api-version: 1.16
+prefix: Communa
+authors: [ Zyplos ]
+description: Simple land claims plugin.
+website: https://lounge.haus
