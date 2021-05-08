@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public class devspace implements CommandExecutor {
@@ -22,7 +21,7 @@ public class devspace implements CommandExecutor {
             Player player = (Player) sender;
 
             final Component tcList = Utils.prefixedMessage()
-                .append(Component.text("Listing chunks in database:"));
+                .append(Component.text(" Listing chunks in database: "));
             player.sendMessage(tcList);
 
             ChunkDAO chunkDao = new ChunkDAO(Hikari.getDataSource());
@@ -37,26 +36,7 @@ public class devspace implements CommandExecutor {
                     )
             );
 
-            org.bukkit.Chunk chunk = player.getLocation().getChunk();
-            int chunkX = chunk.getX();
-            int chunkZ = chunk.getZ();
-
-            Chunk newClaim = new Chunk();
-            newClaim.setChunk_id(137);
-            newClaim.setPlayer_id(player.getUniqueId().toString());
-            newClaim.setClaimed_on(new Timestamp(System.currentTimeMillis()));
-            newClaim.setX(chunkX);
-            newClaim.setZ(chunkZ);
-            chunkDao.insert(newClaim);
-
-            final Component tcChunk = Utils.prefixedMessage()
-                .append(Component.text("Claimed chunk"))
-                .append(Component.text(" | ", TextColor.color(0xbababa)))
-                .append(Component.text("X: "))
-                .append(Component.text(chunkX, TextColor.color(0xffa631)))
-                .append(Component.text(" Z: "))
-                .append(Component.text(chunkZ, TextColor.color(0xffa631)));
-            player.sendMessage(tcChunk);
+            player.sendMessage(player.getWorld().getUID().toString());
         }
         return true;
     }

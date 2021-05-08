@@ -10,4 +10,8 @@ public class Utils {
             .append(Component.text("Server", TextColor.color(0xff3e3e)))
             .append(Component.text("] ", TextColor.color(0x848484))).asComponent();
     }
+
+    public static Component formatErrorMessage(String msg) {
+        return Component.text(msg, TextColor.color(0xfa947d)).asComponent();
+    }
 }

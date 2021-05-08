@@ -15,39 +15,24 @@ public class ChunkDAO {
         dao = new Sql2o(ds);
     }
 
-
     public List<Chunk> fetchAll() {
-        String sql = "SELECT chunk_id, BIN_TO_UUID(player_id) AS player_id, name, claimed_on, x, z FROM chunks JOIN players USING (player_id)";
+        String sql = "SELECT " +
+            "chunk_id, BIN_TO_UUID(player_id) AS player_id, name, claimed_on, x, z, BIN_TO_UUID(dimension) AS " +
+            "dimension " +
+            "FROM chunks JOIN players USING (player_id)";
         try (Connection conn = dao.open()) {
             return conn.createQuery(sql).executeAndFetch(Chunk.class);
         }
     }
 
-    /*
+    // TODO fetch by player
 
-    INSERT INTO players(player_id, name, joined) VALUES
-            ( UUID_TO_BIN('***REMOVED***'), 'Zyp', '2021-03-25 20:19:19' );
-
-     */
-        /*
-
-    CREATE TABLE chunks
-(
-    chunk_id INT unsigned AUTO_INCREMENT PRIMARY KEY,
-    player_id BINARY(16),
-    claimed_on TIMESTAMP NOT NULL,
-    x MEDIUMINT NOT NULL,
-    z MEDIUMINT NOT NULL,
-    FOREIGN KEY (player_id) REFERENCES players(player_id)
-);
-
-     */
     public void insert(Chunk chunk) {
-        String sql = "INSERT INTO chunks(player_id, claimed_on, x, z) VALUES ( UUID_TO_BIN(:player_id), :claimed_on, :x, :z)";
+        String sql = "INSERT INTO chunks(player_id, claimed_on, x, z, dimension) VALUES ( UUID_TO_BIN(:player_id), " +
+            ":claimed_on, :x, :z, UUID_TO_BIN(:dimension))";
         try (Connection conn = dao.open()) {
             conn.createQuery(sql).bind(chunk).executeUpdate();
         }
     }
-
 }
 

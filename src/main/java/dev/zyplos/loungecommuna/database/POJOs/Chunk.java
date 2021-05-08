@@ -21,6 +21,7 @@ public class Chunk {
     private Timestamp claimed_on;
     int x;
     int z;
+    private String dimension;
 
     public int getChunk_id() {
         return this.chunk_id;
@@ -68,6 +69,14 @@ public class Chunk {
 
     public void setZ(int z) {
         this.z = z;
+    }
+
+    public String getDimension() {
+        return this.dimension;
+    }
+
+    public void setDimension(String dimension) {
+        this.dimension = dimension;
     }
 
 }
