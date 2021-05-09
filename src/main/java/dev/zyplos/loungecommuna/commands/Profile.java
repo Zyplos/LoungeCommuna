@@ -10,6 +10,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -18,6 +19,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
@@ -28,23 +34,19 @@ public class Profile implements CommandExecutor {
         if (sender instanceof Player) {
             Player senderPlayer = (Player) sender;
 
-            if (args.length == 0) {
-                senderPlayer.sendMessage(
-                    Utils.prefixedMessage().append(
-                        Utils.formatErrorMessage("Seems you're missing a username. Do ")
-                            .append(Component.text("/profile <username>", NamedTextColor.GREEN))
-                    )
-                );
-                return true;
+            String searchingPlayerString = senderPlayer.getName();
+
+            if (args.length > 0) {
+                searchingPlayerString = args[0];
             }
 
-            Player onlinePlayer = Bukkit.getPlayer(args[0]);
+            Player onlinePlayer = Bukkit.getPlayer(searchingPlayerString);
             OfflinePlayer offlinePlayer = null;
-            String parsedName = args[0];
+            String parsedName = searchingPlayerString;
 
             if (onlinePlayer == null) {
                 PlayerDAO playerDAO = new PlayerDAO(Hikari.getDataSource());
-                List<dev.zyplos.loungecommuna.database.POJOs.Player> playerFromDb = playerDAO.fetchByName(args[0]);
+                List<dev.zyplos.loungecommuna.database.POJOs.Player> playerFromDb = playerDAO.fetchByName(searchingPlayerString);
 
                 if (playerFromDb.isEmpty()) {
                     senderPlayer.sendMessage(
@@ -67,32 +69,89 @@ public class Profile implements CommandExecutor {
             String parsedUUID =
                 onlinePlayer != null ? onlinePlayer.getUniqueId().toString() : offlinePlayer.getUniqueId().toString();
 
-            Component tcName = Component.text(parsedName + "\n", TextColor.color(0xffffff));
+            Component tcName = Component.text(parsedName, TextColor.color(0xffffff));
 
             Component tcOnlineStatus;
             if (onlinePlayer != null) {
-                tcOnlineStatus = Component.text("◆ Currently online.\n", TextColor.color(0x2bcd82));
+                tcOnlineStatus = Component.text("◆ Currently online", TextColor.color(0x2bcd82));
             } else {
-                Timestamp lastSeenTimestamp = new Timestamp(offlinePlayer.getLastSeen());
-                tcOnlineStatus = Component.text("◆ Last seen: " + lastSeenTimestamp + "\n", TextColor.color(0x6c7f96));
+                String lastSeenString = DurationFormatUtils.formatPeriod(
+                    offlinePlayer.getLastSeen(),
+                    System.currentTimeMillis(),
+                    "d'days' H'hrs' m'mins' s'sec ago'"
+                );
+                tcOnlineStatus = Component.text("◆ Last seen: " + lastSeenString, TextColor.color(0xbababa));
             }
 
             ChunkDAO chunkDAO = new ChunkDAO(Hikari.getDataSource());
             int numChunks = chunkDAO.fetchCountByUUID(parsedUUID);
 
             Component tcChunkAmount = Component.text(
-                "⧈ " + numChunks + " " + (numChunks == 1 ? "chunk" : "chunks") + " claimed\n",
+                "⧈ " + numChunks + " " + (numChunks == 1 ? "chunk" : "chunks") + " claimed",
                 TextColor.color(0xc194fb));
 
             final String playerUrl = "https://lounge.haus/mc/profile/" + parsedUUID;
             Component tcUrlPage = Component.text(
-                "⬈ View more details on the lounge site\n" + playerUrl, TextColor.color(0xa9c8fb))
+                "⬈ View more details online", TextColor.color(0xa9c8fb))
                 .clickEvent(ClickEvent.openUrl(playerUrl))
                 .hoverEvent(HoverEvent.showText(Component.text("Open URL")));
 
-            TextComponent output = Component.text().append(tcName, tcChunkAmount, tcOnlineStatus, tcUrlPage).build();
+            final String pixelSpacer = "    ";
+            try {
+                URL url = new URL("https://crafatar.com/avatars/" + parsedUUID + ".png?size=8&overlay");
+                BufferedImage image = ImageIO.read(url);
 
-            senderPlayer.sendMessage(output);
+                TextComponent.Builder tcPixels = Component.text().append(Component.newline());
+
+                for (int y = 0; y < image.getHeight(); y++) {
+                    for (int x = 0; x < image.getWidth(); x++) {
+                        int pixel = image.getRGB(x, y);
+                        //Creating a Color object from pixel value
+                        Color color = new Color(pixel, false);
+                        //Retrieving the R G B values
+                        int red = color.getRed();
+                        int green = color.getGreen();
+                        int blue = color.getBlue();
+                        tcPixels.append(Component.text("█", TextColor.color(red, green, blue)));
+                    }
+
+                    if (y == 1) {
+                        tcPixels
+                            .append(Component.text(pixelSpacer))
+                            .append(tcName);
+                    }
+                    if (y == 2) {
+                        tcPixels
+                            .append(Component.text(pixelSpacer))
+                            .append(tcUrlPage);
+                    }
+                    if (y == 5) {
+                        tcPixels
+                            .append(Component.text(pixelSpacer))
+                            .append(tcChunkAmount);
+                    }
+                    if (y == 6) {
+                        tcPixels
+                            .append(Component.text(pixelSpacer))
+                            .append(tcOnlineStatus);
+                    }
+
+                    tcPixels.append(Component.newline());
+                }
+
+                senderPlayer.sendMessage(tcPixels.build());
+            } catch (IOException e) {
+                TextComponent output = Component.text().append(
+                    tcName,
+                    Component.newline(),
+                    tcUrlPage,
+                    Component.newline(),
+                    tcChunkAmount,
+                    Component.newline(),
+                    tcOnlineStatus
+                ).build();
+                senderPlayer.sendMessage(output);
+            }
         }
         return true;
     }
