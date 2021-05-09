@@ -2,6 +2,7 @@ package dev.zyplos.loungecommuna.commands;
 
 import dev.zyplos.loungecommuna.Utils;
 import dev.zyplos.loungecommuna.database.ChunkDAO;
+import dev.zyplos.loungecommuna.database.DuplicateChunkException;
 import dev.zyplos.loungecommuna.database.Hikari;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -55,11 +56,19 @@ public class Claim implements CommandExecutor {
                     .append(Component.text(chunkZ, TextColor.color(0xffa631)))
                     .append(Component.text(")."));
                 Bukkit.broadcast(tcAdminChunk, "communa.admin");
+            } catch (DuplicateChunkException e) {
+                player.sendMessage(
+                    Utils.prefixedMessage().append(
+                        Component.text("This chunk has already been claimed!", TextColor.color(0xfa947d))
+                    )
+                );
             } catch (Exception e) {
-                player.sendMessage(Utils.prefixedMessage().append(Utils.formatErrorMessage(e.toString())));
+                player.sendMessage(
+                    Utils.prefixedMessage().append(
+                        Utils.formatErrorMessage(e.toString())
+                    )
+                );
             }
-
-
         }
         return true;
     }
