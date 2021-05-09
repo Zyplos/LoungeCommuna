@@ -11,18 +11,14 @@ commands:
     description: Claim the chunk you are in.
     usage: /<command>
     permission: communa.use
-  pixels:
-    description: image test
-    usage: /<command>
+  profile:
+    description: Get info on a player.
+    usage: /<command> <player>
     permission: communa.use
   devspace:
     description: Flips a coin.
     usage: /<command>
     permission: communa.admin
-  crashma:
-    description: crashma? what is that? whats crashma
-    usage: /<command>
-    permission: communa.use
 
 permissions:
   #  communa.*:

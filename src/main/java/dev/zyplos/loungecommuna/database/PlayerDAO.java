@@ -22,6 +22,15 @@ public class PlayerDAO {
         }
     }
 
+    public List<Player> fetchByName(String username) {
+        String sql = " SELECT BIN_TO_UUID(player_id) AS player_id, name, joined FROM players WHERE name=:username";
+        try (Connection conn = dao.open()) {
+            return conn.createQuery(sql)
+                .addParameter("username", username)
+                .executeAndFetch(Player.class);
+        }
+    }
+
     public void insert(Player player) {
         String sql = "INSERT IGNORE INTO players(player_id, name, joined) VALUES ( UUID_TO_BIN(:player_id), :name, " +
             ":joined )";
