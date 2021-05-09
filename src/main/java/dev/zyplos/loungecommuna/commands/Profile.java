@@ -80,7 +80,7 @@ public class Profile implements CommandExecutor {
                     System.currentTimeMillis(),
                     "d'days' H'hrs' m'mins' s'sec ago'"
                 );
-                tcOnlineStatus = Component.text("◆ Last seen: " + lastSeenString, TextColor.color(0xbababa));
+                tcOnlineStatus = Component.text("◆ Last on " + lastSeenString, TextColor.color(0xbababa));
             }
 
             ChunkDAO chunkDAO = new ChunkDAO(Hikari.getDataSource());
