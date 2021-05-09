@@ -1,5 +1,6 @@
 package dev.zyplos.loungecommuna;
 
+import dev.zyplos.loungecommuna.Events.PlayerJoined;
 import dev.zyplos.loungecommuna.commands.Claim;
 import dev.zyplos.loungecommuna.commands.devspace;
 import dev.zyplos.loungecommuna.database.Hikari;
@@ -13,6 +14,7 @@ public final class LoungeCommuna extends JavaPlugin {
         this.getCommand("claim").setExecutor(new Claim());
         this.getCommand("devspace").setExecutor(new devspace());
 
+        getServer().getPluginManager().registerEvents(new PlayerJoined(), this);
         getLogger().info("Enabled.");
     }
 
