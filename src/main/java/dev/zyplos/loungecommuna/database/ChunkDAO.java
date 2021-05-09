@@ -18,11 +18,23 @@ public class ChunkDAO {
 
     public List<Chunk> fetchAll() {
         String sql = "SELECT " +
-            "chunk_id, BIN_TO_UUID(player_id) AS player_id, name, claimed_on, x, z, BIN_TO_UUID(dimension) AS " +
-            "dimension " +
+            "chunk_id, BIN_TO_UUID(player_id) AS player_id, name, claimed_on, x, z," +
+            "BIN_TO_UUID(dimension) AS dimension " +
             "FROM chunks JOIN players USING (player_id)";
         try (Connection conn = dao.open()) {
             return conn.createQuery(sql).executeAndFetch(Chunk.class);
+        }
+    }
+
+    public List<Chunk> fetchByCoords(int xCoord, int zCoord) {
+        String sql = "SELECT chunk_id, BIN_TO_UUID(player_id) AS player_id, name, claimed_on, x, z," +
+            "BIN_TO_UUID(dimension) AS dimension " +
+            "FROM chunks JOIN players USING (player_id) WHERE x=:xCoord AND z=:zCoord";
+        try (Connection conn = dao.open()) {
+            return conn.createQuery(sql)
+                .addParameter("xCoord", xCoord)
+                .addParameter("zCoord", zCoord)
+                .executeAndFetch(Chunk.class);
         }
     }
 
