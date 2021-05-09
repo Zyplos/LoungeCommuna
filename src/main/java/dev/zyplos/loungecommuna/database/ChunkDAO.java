@@ -38,7 +38,25 @@ public class ChunkDAO {
         }
     }
 
-    // TODO fetch by player
+    public List<Chunk> fetchByUUID(String uuid) {
+        String sql = "SELECT chunk_id, BIN_TO_UUID(player_id) AS player_id, claimed_on, x, z," +
+            "BIN_TO_UUID(dimension) AS dimension " +
+            "FROM chunks WHERE player_id=UUID_TO_BIN(:uuid)";
+        try (Connection conn = dao.open()) {
+            return conn.createQuery(sql)
+                .addParameter("uuid", uuid)
+                .executeAndFetch(Chunk.class);
+        }
+    }
+
+    public int fetchCountByUUID(String uuid) {
+        String sql = "SELECT COUNT(*) FROM chunks WHERE player_id=UUID_TO_BIN(:uuid)";
+        try (Connection conn = dao.open()) {
+            return conn.createQuery(sql)
+                .addParameter("uuid", uuid)
+                .executeScalar(Integer.class);
+        }
+    }
 
     public void insert(Chunk chunk) throws DuplicateChunkException {
         String sql = "INSERT INTO chunks(player_id, claimed_on, x, z, dimension) VALUES ( UUID_TO_BIN(:player_id), " +
