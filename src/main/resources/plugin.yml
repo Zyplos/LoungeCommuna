@@ -15,6 +15,10 @@ commands:
     description: Get info on a player.
     usage: /<command> <player>
     permission: communa.use
+  chunkinfo:
+    description: Get info on the chunk you're standing on.
+    usage: /<command>
+    permission: communa.use
   devspace:
     description: Flips a coin.
     usage: /<command>
