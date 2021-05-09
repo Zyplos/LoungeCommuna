@@ -21,7 +21,7 @@ public class devspace implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-
+            
             player.sendMessage(Math.random() > 0.5 ? "heads" : "tails");
         }
         return true;
