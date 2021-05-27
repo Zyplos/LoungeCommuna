@@ -1,17 +1,5 @@
 package dev.zyplos.loungecommuna.database.POJOs;
 
-/*
-CREATE TABLE chunks
-(
-    chunk_id INT unsigned AUTO_INCREMENT PRIMARY KEY,
-    player_id BINARY(16),
-    claimed_on TIMESTAMP NOT NULL,
-    x MEDIUMINT NOT NULL,
-    z MEDIUMINT NOT NULL,
-    FOREIGN KEY (player_id) REFERENCES players(player_id)
-);
- */
-
 import java.sql.Timestamp;
 
 public class Chunk {

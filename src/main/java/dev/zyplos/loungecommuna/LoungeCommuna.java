@@ -11,17 +11,21 @@ import dev.zyplos.loungecommuna.database.Hikari;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LoungeCommuna extends JavaPlugin {
+    public Hikari hikariPool;
+    public Utils utils;
+
     @Override
     public void onEnable() {
-        Hikari.init();
+        hikariPool = new Hikari();
+        utils = new Utils();
 
-        this.getCommand("claim").setExecutor(new Claim());
-        this.getCommand("devspace").setExecutor(new devspace());
-        this.getCommand("profile").setExecutor(new Profile());
-        this.getCommand("chunkinfo").setExecutor(new ChunkInfo());
+        this.getCommand("claim").setExecutor(new Claim(this));
+        this.getCommand("devspace").setExecutor(new devspace(this));
+        this.getCommand("profile").setExecutor(new Profile(this));
+        this.getCommand("chunkinfo").setExecutor(new ChunkInfo(this));
 
-        getServer().getPluginManager().registerEvents(new PlayerJoined(), this);
-        getServer().getPluginManager().registerEvents(new PlayerMoved(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoined(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoved(this), this);
         getServer().getPluginManager().registerEvents(new PlayerResourcePackStatusChanged(), this);
         getLogger().info("Enabled.");
     }

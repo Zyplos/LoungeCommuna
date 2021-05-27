@@ -1,9 +1,8 @@
 package dev.zyplos.loungecommuna.commands;
 
-import dev.zyplos.loungecommuna.Utils;
+import dev.zyplos.loungecommuna.LoungeCommuna;
 import dev.zyplos.loungecommuna.database.ChunkDAO;
 import dev.zyplos.loungecommuna.database.DuplicateChunkException;
-import dev.zyplos.loungecommuna.database.Hikari;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -17,12 +16,18 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Timestamp;
 
 public class Claim implements CommandExecutor {
+    private final LoungeCommuna plugin;
+
+    public Claim(LoungeCommuna plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            ChunkDAO chunkDao = new ChunkDAO(Hikari.getDataSource());
+            ChunkDAO chunkDao = new ChunkDAO(plugin.hikariPool.getDataSource());
 
             org.bukkit.Chunk chunk = player.getLocation().getChunk();
             int chunkX = chunk.getX();
@@ -39,7 +44,7 @@ public class Claim implements CommandExecutor {
             try {
                 chunkDao.insert(newClaim);
 
-                final Component tcChunk = Utils.prefixedMessage()
+                final Component tcChunk = plugin.utils.prefixedMessage()
                     .append(Component.text("Claimed chunk"))
                     .append(Component.text(" | ", TextColor.color(0xbababa)))
                     .append(Component.text("X: "))
@@ -48,7 +53,7 @@ public class Claim implements CommandExecutor {
                     .append(Component.text(chunkZ, TextColor.color(0xffa631)));
                 player.sendMessage(tcChunk);
 
-                final Component tcAdminChunk = Utils.prefixedMessage()
+                final Component tcAdminChunk = plugin.utils.prefixedMessage()
                     .append(Component.text(player.getName(), NamedTextColor.WHITE))
                     .append(Component.text(" claimed chunk ("))
                     .append(Component.text(chunkX, TextColor.color(0xffa631)))
@@ -58,14 +63,14 @@ public class Claim implements CommandExecutor {
                 Bukkit.broadcast(tcAdminChunk, "communa.admin");
             } catch (DuplicateChunkException e) {
                 player.sendMessage(
-                    Utils.prefixedMessage().append(
+                    plugin.utils.prefixedMessage().append(
                         Component.text("This chunk has already been claimed!", TextColor.color(0xfa947d))
                     )
                 );
             } catch (Exception e) {
                 player.sendMessage(
-                    Utils.prefixedMessage().append(
-                        Utils.formatErrorMessage(e.toString())
+                    plugin.utils.prefixedMessage().append(
+                        plugin.utils.formatErrorMessage(e.toString())
                     )
                 );
             }

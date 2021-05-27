@@ -1,14 +1,12 @@
 package dev.zyplos.loungecommuna.commands;
 
-import dev.zyplos.loungecommuna.Utils;
+import dev.zyplos.loungecommuna.LoungeCommuna;
 import dev.zyplos.loungecommuna.database.ChunkDAO;
-import dev.zyplos.loungecommuna.database.Hikari;
 import dev.zyplos.loungecommuna.database.PlayerDAO;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
@@ -24,11 +22,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
 public class Profile implements CommandExecutor {
+    private final LoungeCommuna plugin;
+
+    public Profile(LoungeCommuna plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
@@ -45,16 +48,16 @@ public class Profile implements CommandExecutor {
             String parsedName = searchingPlayerString;
 
             if (onlinePlayer == null) {
-                PlayerDAO playerDAO = new PlayerDAO(Hikari.getDataSource());
+                PlayerDAO playerDAO = new PlayerDAO(plugin.hikariPool.getDataSource());
                 List<dev.zyplos.loungecommuna.database.POJOs.Player> playerFromDb = playerDAO.fetchByName(searchingPlayerString);
 
                 if (playerFromDb.isEmpty()) {
                     senderPlayer.sendMessage(
-                        Utils.prefixedMessage()
+                        plugin.utils.prefixedMessage()
                             .append(
                                 Component.text(parsedName, TextColor.color(0xffa631))
                             )
-                            .append(Utils.formatErrorMessage(" has never joined this server."))
+                            .append(plugin.utils.formatErrorMessage(" has never joined this server."))
                     );
                     return true;
                 }
@@ -83,7 +86,7 @@ public class Profile implements CommandExecutor {
                 tcOnlineStatus = Component.text("◆ Last on " + lastSeenString, TextColor.color(0xbababa));
             }
 
-            ChunkDAO chunkDAO = new ChunkDAO(Hikari.getDataSource());
+            ChunkDAO chunkDAO = new ChunkDAO(plugin.hikariPool.getDataSource());
             int numChunks = chunkDAO.fetchCountByUUID(parsedUUID);
 
             Component tcChunkAmount = Component.text(

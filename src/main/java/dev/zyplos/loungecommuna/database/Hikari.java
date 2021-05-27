@@ -10,13 +10,9 @@ import java.sql.SQLException;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Hikari {
-    private static HikariDataSource ds;
+    private HikariDataSource ds;
 
-    public static void init() {
-        if (ds != null) {
-            System.out.println("Tried to reinitialize a SQL connection pool.");
-            return;
-        }
+    public Hikari() {
 
         final Dotenv dotenv = Dotenv.load();
         final String dbUsername = dotenv.get("DB_USERNAME");
@@ -33,11 +29,12 @@ public class Hikari {
         ds = new HikariDataSource(config);
     }
 
-    public static DataSource getDataSource() {
+
+    public DataSource getDataSource() {
         return ds;
     }
 
-    public static Connection getConnection() throws SQLException {
+    public Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
 }

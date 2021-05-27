@@ -1,8 +1,7 @@
 package dev.zyplos.loungecommuna.commands;
 
-import dev.zyplos.loungecommuna.Utils;
+import dev.zyplos.loungecommuna.LoungeCommuna;
 import dev.zyplos.loungecommuna.database.ChunkDAO;
-import dev.zyplos.loungecommuna.database.Hikari;
 import dev.zyplos.loungecommuna.database.POJOs.Chunk;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -19,12 +18,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class ChunkInfo implements CommandExecutor {
+    private final LoungeCommuna plugin;
+
+    public ChunkInfo(LoungeCommuna plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            ChunkDAO chunkDao = new ChunkDAO(Hikari.getDataSource());
+            ChunkDAO chunkDao = new ChunkDAO(plugin.hikariPool.getDataSource());
             List<Chunk> chunkOwnerInfo = chunkDao.fetchByCoords(player.getChunk().getX(), player.getChunk().getZ());
 
             if (!chunkOwnerInfo.isEmpty()) {
@@ -35,7 +40,7 @@ public class ChunkInfo implements CommandExecutor {
                 );
 
                 player.sendMessage(
-                    Utils.prefixedMessage()
+                    plugin.utils.prefixedMessage()
                         .append(Component.text("This chunk is owned by "))
                         .append(Component.text(chunkOwnerInfo.get(0).getName(), TextColor.color(0xffa631)))
                         .append(Component.text(". They claimed it "))
@@ -52,7 +57,7 @@ public class ChunkInfo implements CommandExecutor {
                 );
             } else {
                 player.sendMessage(
-                    Utils.prefixedMessage()
+                    plugin.utils.prefixedMessage()
                         .append(Component.text("No one has claimed this chunk. Make it yours by doing "))
                         .append(Component.text("/claim", NamedTextColor.GREEN))
                         .append(Component.text("."))

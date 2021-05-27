@@ -1,8 +1,7 @@
 package dev.zyplos.loungecommuna.Events;
 
-import dev.zyplos.loungecommuna.Utils;
+import dev.zyplos.loungecommuna.LoungeCommuna;
 import dev.zyplos.loungecommuna.database.ChunkDAO;
-import dev.zyplos.loungecommuna.database.Hikari;
 import dev.zyplos.loungecommuna.database.POJOs.Chunk;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -13,13 +12,18 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.List;
 
 public class PlayerMoved implements Listener {
+    private final LoungeCommuna plugin;
+
+    public PlayerMoved(LoungeCommuna plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onPlayerMoved(PlayerMoveEvent event) {
         if (
             !event.getFrom().getChunk().equals(event.getTo().getChunk())
         ) {
-            ChunkDAO chunkDao = new ChunkDAO(Hikari.getDataSource());
+            ChunkDAO chunkDao = new ChunkDAO(plugin.hikariPool.getDataSource());
             List<Chunk> chunkOwnerInfo = chunkDao.fetchByCoords(event.getTo().getChunk().getX(),
                 event.getTo().getChunk().getZ());
             if (!chunkOwnerInfo.isEmpty()) {
