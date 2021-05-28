@@ -26,7 +26,7 @@ public class PlayerDAO {
             public void run() {
                 String sql = " SELECT BIN_TO_UUID(player_id) AS player_id, name, joined, community_id " +
                     "FROM players WHERE name=:username";
-                
+
                 try (Connection conn = dao.open()) {
                     List<Player> result = conn.createQuery(sql)
                         .addParameter("username", username)
@@ -47,8 +47,9 @@ public class PlayerDAO {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String sql = "INSERT IGNORE INTO players(player_id, name, joined) VALUES ( UUID_TO_BIN(:player_id), :name, " +
-                    ":joined )";
+                String sql = "INSERT INTO players(player_id, name, joined) " +
+                    "VALUES ( UUID_TO_BIN(:player_id), :name, :joined ) " +
+                    "ON DUPLICATE KEY UPDATE name=:name";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql).bind(player).executeUpdate();
                 }
