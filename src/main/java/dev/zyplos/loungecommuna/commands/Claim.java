@@ -1,8 +1,6 @@
 package dev.zyplos.loungecommuna.commands;
 
 import dev.zyplos.loungecommuna.LoungeCommuna;
-import dev.zyplos.loungecommuna.database.ChunkDAO;
-import dev.zyplos.loungecommuna.database.DuplicateChunkException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -27,8 +25,6 @@ public class Claim implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            ChunkDAO chunkDao = new ChunkDAO(plugin.hikariPool.getDataSource());
-
             org.bukkit.Chunk chunk = player.getLocation().getChunk();
             int chunkX = chunk.getX();
             int chunkZ = chunk.getZ();
@@ -41,39 +37,34 @@ public class Claim implements CommandExecutor {
             newClaim.setZ(chunkZ);
             newClaim.setDimension(player.getWorld().getUID().toString());
 
-            try {
-                chunkDao.insert(newClaim);
+            plugin.hikariPool.chunkDAO.insert(newClaim, result -> {
+                if (result == null) {
+                    final Component tcChunk = plugin.utils.prefixedMessage()
+                        .append(Component.text("Claimed chunk"))
+                        .append(Component.text(" | ", TextColor.color(0xbababa)))
+                        .append(Component.text("X: "))
+                        .append(Component.text(chunkX, TextColor.color(0xffa631)))
+                        .append(Component.text(" Z: "))
+                        .append(Component.text(chunkZ, TextColor.color(0xffa631)));
+                    player.sendMessage(tcChunk);
 
-                final Component tcChunk = plugin.utils.prefixedMessage()
-                    .append(Component.text("Claimed chunk"))
-                    .append(Component.text(" | ", TextColor.color(0xbababa)))
-                    .append(Component.text("X: "))
-                    .append(Component.text(chunkX, TextColor.color(0xffa631)))
-                    .append(Component.text(" Z: "))
-                    .append(Component.text(chunkZ, TextColor.color(0xffa631)));
-                player.sendMessage(tcChunk);
+                    final Component tcAdminChunk = plugin.utils.prefixedMessage()
+                        .append(Component.text(player.getName(), NamedTextColor.WHITE))
+                        .append(Component.text(" claimed chunk ("))
+                        .append(Component.text(chunkX, TextColor.color(0xffa631)))
+                        .append(Component.text(","))
+                        .append(Component.text(chunkZ, TextColor.color(0xffa631)))
+                        .append(Component.text(")."));
+                    Bukkit.broadcast(tcAdminChunk, "communa.admin");
+                    return;
+                }
 
-                final Component tcAdminChunk = plugin.utils.prefixedMessage()
-                    .append(Component.text(player.getName(), NamedTextColor.WHITE))
-                    .append(Component.text(" claimed chunk ("))
-                    .append(Component.text(chunkX, TextColor.color(0xffa631)))
-                    .append(Component.text(","))
-                    .append(Component.text(chunkZ, TextColor.color(0xffa631)))
-                    .append(Component.text(")."));
-                Bukkit.broadcast(tcAdminChunk, "communa.admin");
-            } catch (DuplicateChunkException e) {
                 player.sendMessage(
                     plugin.utils.prefixedMessage().append(
-                        Component.text("This chunk has already been claimed!", TextColor.color(0xfa947d))
+                        plugin.utils.formatErrorMessage(result)
                     )
                 );
-            } catch (Exception e) {
-                player.sendMessage(
-                    plugin.utils.prefixedMessage().append(
-                        plugin.utils.formatErrorMessage(e.toString())
-                    )
-                );
-            }
+            });
         }
         return true;
     }

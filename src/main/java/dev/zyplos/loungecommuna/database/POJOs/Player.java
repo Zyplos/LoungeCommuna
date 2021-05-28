@@ -6,6 +6,7 @@ public class Player {
     private String player_id;
     private String name;
     private Timestamp joined;
+    private int community_id;
 
     public String getPlayer_id() {
         return this.player_id;
@@ -29,5 +30,13 @@ public class Player {
 
     public void setJoined(Timestamp joined) {
         this.joined = joined;
+    }
+
+    public int getCommunity_id() {
+        return this.community_id;
+    }
+
+    public void setCommunity_id(int community_id) {
+        this.community_id = community_id;
     }
 }

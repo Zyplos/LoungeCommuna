@@ -2,17 +2,19 @@ package dev.zyplos.loungecommuna.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import dev.zyplos.loungecommuna.LoungeCommuna;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 public class Hikari {
     private HikariDataSource ds;
+    public PlayerDAO playerDAO;
+    public ChunkDAO chunkDAO;
 
-    public Hikari() {
+    public Hikari(LoungeCommuna plugin) {
 
         final Dotenv dotenv = Dotenv.load();
         final String dbUsername = dotenv.get("DB_USERNAME");
@@ -27,8 +29,10 @@ public class Hikari {
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         ds = new HikariDataSource(config);
-    }
 
+        playerDAO = new PlayerDAO(ds, plugin);
+        chunkDAO = new ChunkDAO(ds, plugin);
+    }
 
     public DataSource getDataSource() {
         return ds;

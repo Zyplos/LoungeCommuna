@@ -16,11 +16,17 @@ public class devspace implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender instanceof Player) {
-            Player player = (Player) sender;
+            Player senderPlayer = (Player) sender;
 
-            player.sendMessage(Math.random() > 0.5 ? "heads" : "tails");
+            plugin.hikariPool.playerDAO.fetchByName("Zyplos", result -> {
+                dev.zyplos.loungecommuna.database.POJOs.Player playerResult = result.get(0);
+
+                senderPlayer.sendMessage("RESULT: " + playerResult.getPlayer_id());
+                senderPlayer.sendMessage("RESULT: " + playerResult.getName());
+                senderPlayer.sendMessage("RESULT: " + playerResult.getJoined());
+            });
         }
         return true;
     }
