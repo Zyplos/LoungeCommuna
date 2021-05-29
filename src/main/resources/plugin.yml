@@ -35,6 +35,10 @@ commands:
     description: List all the players currently online.
     usage: /<command>
     permission: communa.use
+  help:
+    description: Server specific help command.
+    usage: /<command>
+    permission: communa.use
   setcommunity:
     description: Set player community.
     usage: /<command>

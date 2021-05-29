@@ -74,7 +74,7 @@ public class Profile implements CommandExecutor {
                     "⧈ " + numChunks + " " + (numChunks == 1 ? "chunk" : "chunks") + " claimed",
                     TextColor.color(0xc194fb));
 
-                final String playerUrl = "https://lounge.haus/mc/player/" + parsedUUID;
+                final String playerUrl = "https://dev.lounge.haus/mc/player/" + parsedUUID;
                 Component tcUrlPage = Component.text(
                     "⬈ View more details online", TextColor.color(0xa9c8fb))
                     .clickEvent(ClickEvent.openUrl(playerUrl))
