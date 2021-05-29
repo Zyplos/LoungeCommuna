@@ -24,10 +24,9 @@ public class PlayerDAO {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String sql = " SELECT BIN_TO_UUID(player_id) AS " +
-                    "player_id, name, joined, community_id, home_x, home_y, home_z, home_dimension " +
+                String sql = " SELECT BIN_TO_UUID(player_id) AS player_id, name, joined," +
+                    "community_id, home_x, home_y, home_z, BIN_TO_UUID(home_dimension) AS home_dimension " +
                     "FROM players WHERE name=:username";
-
                 try (Connection conn = dao.open()) {
                     List<Player> result = conn.createQuery(sql)
                         .addParameter("username", username)

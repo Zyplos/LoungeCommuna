@@ -27,6 +27,10 @@ commands:
     description: Show your home coordinates if you set them.
     usage: /<command>
     permission: communa.use
+  unclaim:
+    description: Unclaim the chunk you are in.
+    usage: /<command>
+    permission: communa.use
   setcommunity:
     description: Set player community.
     usage: /<command>

@@ -3,7 +3,6 @@ package dev.zyplos.loungecommuna.internals;
 import dev.zyplos.loungecommuna.LoungeCommuna;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.imageio.ImageIO;
@@ -31,6 +30,14 @@ public class Utils {
         4, "#7c00ff",
         5, "#f1f353",
         6, "#ffd300"
+    );
+
+    public Map<String, String> worldFriendlyNames = Map.of(
+        "world", "The Overworld",
+        "world_nether", "The Nether",
+        "world_the_end", "The End",
+        "aether", "The Aether",
+        "the_deep_dark", "The Deeper Dark"
     );
 
     // chat color palette

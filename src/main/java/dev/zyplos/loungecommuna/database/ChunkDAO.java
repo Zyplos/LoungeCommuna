@@ -66,6 +66,25 @@ public class ChunkDAO {
         }.runTaskAsynchronously(plugin);
     }
 
+    public void deleteChunk(int x, int z, String dimensionUUID, String playerUUID) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String sql = "DELETE FROM chunks WHERE " +
+                    "x=:x AND z=:z AND dimension=UUID_TO_BIN(:dimensionUUID)" +
+                    "AND player_id=UUID_TO_BIN(:playerUUID)";
+                try (Connection conn = dao.open()) {
+                    conn.createQuery(sql)
+                        .addParameter("x", x)
+                        .addParameter("z", z)
+                        .addParameter("dimensionUUID", dimensionUUID)
+                        .addParameter("playerUUID", playerUUID)
+                        .executeUpdate();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
     public void insert(Chunk chunk, AsyncCallback<String> callback) {
         new BukkitRunnable() {
             @Override

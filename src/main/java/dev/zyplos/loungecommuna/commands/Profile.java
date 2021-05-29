@@ -9,6 +9,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -39,12 +40,22 @@ public class Profile implements CommandExecutor {
                 TextColor.fromCSSHexString(plugin.utils.getCommunityBrandColor(communityId)));
             Component tcName = Component.text(parsedName, TextColor.color(0xffffff)).append(tcCommunity);
 
-            Component tcHome =
-                Component.text(
+
+            Component tcHome;
+            if (resultPlayer.getHome_dimension() == null) {
+                tcHome = Component.text(
+                    "☗ No home set",
+                    TextColor.color(plugin.utils.colors.get("muted"))
+                );
+            } else {
+                World homeDimension = Bukkit.getWorld(UUID.fromString(resultPlayer.getHome_dimension()));
+                tcHome = Component.text(
                     "☗ Home at " + resultPlayer.getHome_x() + ", "
                         + resultPlayer.getHome_y() + ", "
-                        + resultPlayer.getHome_z() + "",
-                    TextColor.color(plugin.utils.colors.get("highlight")));
+                        + resultPlayer.getHome_z() + " in " + plugin.utils.worldFriendlyNames.get(homeDimension.getName()),
+                    TextColor.color(plugin.utils.colors.get("highlight"))
+                );
+            }
 
             Component tcOnlineStatus;
             if (onlinePlayer != null) {
