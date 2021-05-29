@@ -24,7 +24,8 @@ public class PlayerDAO {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String sql = " SELECT BIN_TO_UUID(player_id) AS player_id, name, joined, community_id " +
+                String sql = " SELECT BIN_TO_UUID(player_id) AS " +
+                    "player_id, name, joined, community_id, home_x, home_y, home_z, home_dimension " +
                     "FROM players WHERE name=:username";
 
                 try (Connection conn = dao.open()) {
@@ -52,6 +53,43 @@ public class PlayerDAO {
                     "ON DUPLICATE KEY UPDATE name=:name";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql).bind(player).executeUpdate();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
+    public void updatePlayerHome(String playerUUID, int x, int y, int z, String dimensionUUID) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String sql = "UPDATE players " +
+                    "SET home_x=:x, home_y=:y, home_z=:z, home_dimension=UUID_TO_BIN(:dimensionUUID) " +
+                    "WHERE player_id=UUID_TO_BIN(:playerUUID)";
+                try (Connection conn = dao.open()) {
+                    conn.createQuery(sql)
+                        .addParameter("playerUUID", playerUUID)
+                        .addParameter("x", x)
+                        .addParameter("y", y)
+                        .addParameter("z", z)
+                        .addParameter("dimensionUUID", dimensionUUID)
+                        .executeUpdate();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
+    public void updatePlayerCommunity(String playerUUID, int communityId) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String sql = "UPDATE players " +
+                    "SET community_id=:communityId " +
+                    "WHERE player_id=UUID_TO_BIN(:playerUUID)";
+                try (Connection conn = dao.open()) {
+                    conn.createQuery(sql)
+                        .addParameter("communityId", communityId)
+                        .addParameter("playerUUID", playerUUID)
+                        .executeUpdate();
                 }
             }
         }.runTaskAsynchronously(plugin);

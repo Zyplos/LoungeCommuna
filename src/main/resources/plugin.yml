@@ -19,6 +19,18 @@ commands:
     description: Get info on the chunk you're standing on.
     usage: /<command>
     permission: communa.use
+  sethome:
+    description: Set your home coordinates to show on your profile or to reference later.
+    usage: /<command>
+    permission: communa.use
+  home:
+    description: Show your home coordinates if you set them.
+    usage: /<command>
+    permission: communa.use
+  setcommunity:
+    description: Set player community.
+    usage: /<command>
+    permission: communa.admin
   devspace:
     description: Flips a coin.
     usage: /<command>

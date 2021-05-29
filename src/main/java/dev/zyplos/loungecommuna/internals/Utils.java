@@ -3,6 +3,7 @@ package dev.zyplos.loungecommuna.internals;
 import dev.zyplos.loungecommuna.LoungeCommuna;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.imageio.ImageIO;
@@ -15,7 +16,7 @@ public class Utils {
     private final LoungeCommuna plugin;
 
     // https://stackoverflow.com/a/6802502
-    Map<Integer, String> communityNameMap = Map.of(
+    public Map<Integer, String> communityNameMap = Map.of(
         1, "the lounge",
         2, "3 AM",
         3, "pegg group",
@@ -23,13 +24,21 @@ public class Utils {
         5, "jay group",
         6, "vold group"
     );
-    Map<Integer, String> communityBrandColorMap = Map.of(
+    public Map<Integer, String> communityBrandColorMap = Map.of(
         1, "#ff3e3e",
         2, "#00a3a3",
         3, "#0094ff",
         4, "#7c00ff",
         5, "#f1f353",
         6, "#ffd300"
+    );
+
+    // chat color palette
+    public Map<String, Integer> colors = Map.of(
+        "muted", 0xbababa,
+        "highlight", 0xffa631,
+        "warning", 0xfa947d,
+        "error", 0xff2929
     );
 
     public Utils(LoungeCommuna plugin) {

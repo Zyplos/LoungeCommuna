@@ -39,6 +39,13 @@ public class Profile implements CommandExecutor {
                 TextColor.fromCSSHexString(plugin.utils.getCommunityBrandColor(communityId)));
             Component tcName = Component.text(parsedName, TextColor.color(0xffffff)).append(tcCommunity);
 
+            Component tcHome =
+                Component.text(
+                    "☗ Home at " + resultPlayer.getHome_x() + ", "
+                        + resultPlayer.getHome_y() + ", "
+                        + resultPlayer.getHome_z() + "",
+                    TextColor.color(plugin.utils.colors.get("highlight")));
+
             Component tcOnlineStatus;
             if (onlinePlayer != null) {
                 tcOnlineStatus = Component.text("◆ Currently online", TextColor.color(0x2bcd82));
@@ -67,6 +74,8 @@ public class Profile implements CommandExecutor {
                     if (image == null) {
                         TextComponent output = Component.text().append(
                             tcName,
+                            Component.newline(),
+                            tcHome,
                             Component.newline(),
                             tcUrlPage,
                             Component.newline(),
@@ -98,6 +107,11 @@ public class Profile implements CommandExecutor {
                                 .append(tcName);
                         }
                         if (y == 2) {
+                            tcPixels
+                                .append(Component.text(pixelSpacer))
+                                .append(tcHome);
+                        }
+                        if (y == 3) {
                             tcPixels
                                 .append(Component.text(pixelSpacer))
                                 .append(tcUrlPage);
