@@ -1,6 +1,7 @@
 package dev.zyplos.loungecommuna;
 
 import dev.zyplos.loungecommuna.Events.PlayerJoined;
+import dev.zyplos.loungecommuna.Events.PlayerLeft;
 import dev.zyplos.loungecommuna.Events.PlayerMoved;
 import dev.zyplos.loungecommuna.Events.PlayerResourcePackStatusChanged;
 import dev.zyplos.loungecommuna.commands.*;
@@ -29,6 +30,7 @@ public final class LoungeCommuna extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerJoined(this), this);
         getServer().getPluginManager().registerEvents(new PlayerMoved(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerLeft(this), this);
         getServer().getPluginManager().registerEvents(new PlayerResourcePackStatusChanged(), this);
         getLogger().info("Enabled.");
     }

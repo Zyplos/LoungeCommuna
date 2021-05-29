@@ -38,7 +38,7 @@ public class List implements CommandExecutor {
             for (Player currentPlayer : onlinePlayers) {
                 tcPlayers.add(
                     Component
-                        .text(currentPlayer.getName(), TextColor.color(0xa9c8fb))
+                        .text(currentPlayer.getName(), TextColor.color(plugin.utils.colors.get("highlight")))
                         .clickEvent(ClickEvent.runCommand("/profile " + currentPlayer.getName()))
                         .hoverEvent(
                             HoverEvent.showText(Component.text("Show " + currentPlayer.getName() + "'s profile"))
