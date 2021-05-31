@@ -28,6 +28,7 @@ public final class LoungeCommuna extends JavaPlugin {
         this.getCommand("unclaim").setExecutor(new Unclaim(this));
         this.getCommand("list").setExecutor(new List(this));
         this.getCommand("help").setExecutor(new Help(this));
+        this.getCommand("visitorslog").setExecutor(new VisitorsLog(this));
 
         getServer().getPluginManager().registerEvents(new PlayerJoined(this), this);
         getServer().getPluginManager().registerEvents(new PlayerMoved(this), this);
@@ -38,6 +39,6 @@ public final class LoungeCommuna extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getLogger().info("Done.");
+        getLogger().info("Disabled.");
     }
 }

@@ -39,6 +39,10 @@ commands:
     description: Server specific help command.
     usage: /<command>
     permission: communa.use
+  visitorslog:
+    description: Show who's recently visited your claim.
+    usage: /<command>
+    permission: communa.use
   setcommunity:
     description: Set player community.
     usage: /<command>

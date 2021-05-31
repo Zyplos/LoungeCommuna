@@ -13,9 +13,9 @@ public class Hikari {
     private HikariDataSource ds;
     public PlayerDAO playerDAO;
     public ChunkDAO chunkDAO;
+    public LogEntryDAO logEntryDAO;
 
     public Hikari(LoungeCommuna plugin) {
-
         final Dotenv dotenv = Dotenv.load();
         final String dbUsername = dotenv.get("DB_USERNAME");
         final String dbPassword = dotenv.get("DB_PASSWORD");
@@ -32,6 +32,7 @@ public class Hikari {
 
         playerDAO = new PlayerDAO(ds, plugin);
         chunkDAO = new ChunkDAO(ds, plugin);
+        logEntryDAO = new LogEntryDAO(ds, plugin);
     }
 
     public DataSource getDataSource() {

@@ -26,7 +26,7 @@ public class ChunkInfo implements CommandExecutor {
             Player player = (Player) sender;
 
             plugin.hikariPool.chunkDAO.fetchByCoords(player.getChunk().getX(),
-                player.getChunk().getZ(), chunkOwnerInfo -> {
+                player.getChunk().getZ(), player.getWorld().getUID().toString(), chunkOwnerInfo -> {
                     if (!chunkOwnerInfo.isEmpty()) {
                         String claimedString = DurationFormatUtils.formatPeriod(
                             chunkOwnerInfo.get(0).getClaimed_on().getTime(),

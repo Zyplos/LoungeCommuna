@@ -3,6 +3,7 @@ package dev.zyplos.loungecommuna.database;
 import dev.zyplos.loungecommuna.LoungeCommuna;
 import dev.zyplos.loungecommuna.database.POJOs.Chunk;
 import dev.zyplos.loungecommuna.internals.AsyncCallback;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
@@ -16,22 +17,24 @@ public class ChunkDAO {
     private final LoungeCommuna plugin;
 
     public ChunkDAO(DataSource ds, LoungeCommuna plugin) {
-        System.out.println("[ChunkDAO] Connecting to database " + ds.toString());
+        Bukkit.getLogger().info("[ChunkDAO] Connecting to database " + ds.toString());
         this.plugin = plugin;
         dao = new Sql2o(ds);
     }
 
-    public void fetchByCoords(int xCoord, int zCoord, AsyncCallback<List<Chunk>> callback) {
+    public void fetchByCoords(int xCoord, int zCoord, String dimensionUUID, AsyncCallback<List<Chunk>> callback) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 String sql = "SELECT chunk_id, BIN_TO_UUID(player_id) AS player_id, name, claimed_on, x, z," +
                     "BIN_TO_UUID(dimension) AS dimension " +
-                    "FROM chunks JOIN players USING (player_id) WHERE x=:xCoord AND z=:zCoord";
+                    "FROM chunks JOIN players USING (player_id) " +
+                    "WHERE x=:xCoord AND z=:zCoord AND dimension=UUID_TO_BIN(:dimensionUUID)";
                 try (Connection conn = dao.open()) {
                     List<Chunk> result = conn.createQuery(sql)
                         .addParameter("xCoord", xCoord)
                         .addParameter("zCoord", zCoord)
+                        .addParameter("dimensionUUID", dimensionUUID)
                         .executeAndFetch(Chunk.class);
 
                     new BukkitRunnable() {

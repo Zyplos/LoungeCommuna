@@ -29,7 +29,7 @@ public class Utils {
         3, "#0094ff",
         4, "#7c00ff",
         5, "#f1f353",
-        6, "#ffd300"
+        6, "#d8b01a"
     );
 
     public Map<String, String> worldFriendlyNames = Map.of(
@@ -42,7 +42,7 @@ public class Utils {
 
     // chat color palette
     public Map<String, Integer> colors = Map.of(
-        "muted", 0xbababa,
+        "muted", 0xb0b0b0,
         "highlight", 0xffa631,
         "warning", 0xfa947d,
         "error", 0xff2929
