@@ -6,17 +6,20 @@ import dev.zyplos.loungecommuna.Events.PlayerMoved;
 import dev.zyplos.loungecommuna.Events.PlayerResourcePackStatusChanged;
 import dev.zyplos.loungecommuna.commands.*;
 import dev.zyplos.loungecommuna.database.Hikari;
+import dev.zyplos.loungecommuna.internals.ScrunchTaskManager;
 import dev.zyplos.loungecommuna.internals.Utils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class LoungeCommuna extends JavaPlugin {
     public Hikari hikariPool;
     public Utils utils;
+    public ScrunchTaskManager taskManager;
 
     @Override
     public void onEnable() {
         hikariPool = new Hikari(this);
         utils = new Utils(this);
+        taskManager = new ScrunchTaskManager(this);
 
         this.getCommand("claim").setExecutor(new Claim(this));
         this.getCommand("devspace").setExecutor(new devspace(this));
@@ -29,6 +32,7 @@ public final class LoungeCommuna extends JavaPlugin {
         this.getCommand("list").setExecutor(new List(this));
         this.getCommand("help").setExecutor(new Help(this));
         this.getCommand("visitorslog").setExecutor(new VisitorsLog(this));
+        this.getCommand("dimdump").setExecutor(new DimDump(this));
 
         getServer().getPluginManager().registerEvents(new PlayerJoined(this), this);
         getServer().getPluginManager().registerEvents(new PlayerMoved(this), this);

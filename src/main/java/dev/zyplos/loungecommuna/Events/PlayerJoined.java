@@ -33,6 +33,7 @@ public class PlayerJoined implements Listener {
 
         plugin.hikariPool.playerDAO.insert(player);
 
+        
         event.joinMessage(
             Component.text("").color(TextColor.color(NamedTextColor.YELLOW))
                 .append(Component.text("[", TextColor.color(0x848484)))

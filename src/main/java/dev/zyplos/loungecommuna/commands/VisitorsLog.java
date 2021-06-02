@@ -42,7 +42,7 @@ public class VisitorsLog implements CommandExecutor {
                             Component.text("Chunk owner: "),
                             Component.text(ownedChunk.getName(), TextColor.color(plugin.utils.colors.get("highlight"))),
                             Component.text(" | ", TextColor.color(plugin.utils.colors.get("muted"))),
-                            Component.text("Last 10 visits:"),
+                            Component.text("Last 10 visits in this chunk:"),
                             Component.newline()
                         );
 

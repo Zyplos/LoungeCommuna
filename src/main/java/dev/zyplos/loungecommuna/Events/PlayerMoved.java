@@ -3,8 +3,6 @@ package dev.zyplos.loungecommuna.Events;
 import dev.zyplos.loungecommuna.LoungeCommuna;
 import dev.zyplos.loungecommuna.database.POJOs.Chunk;
 import dev.zyplos.loungecommuna.database.POJOs.LogEntry;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -33,12 +31,14 @@ public class PlayerMoved implements Listener {
             plugin.hikariPool.chunkDAO.fetchByCoords(chunkX,
                 chunkZ, chunkDimension, chunkOwnerInfo -> {
                     if (!chunkOwnerInfo.isEmpty()) { // this chunk is owned by someone
-
+                        plugin.taskManager.stopTask(event.getPlayer(), false);
                         // don't show this messages to players who own the chunk
-                        // that would be annoying if people spend most of there time there
+                        // that would be annoying for people who spend most of their time in their own chunks
                         Chunk ownedChunk = chunkOwnerInfo.get(0);
                         // current player owns current chunk
                         if (ownedChunk.getPlayer_id().equals(playerUUID)) {
+                            // player actually owns chunk but message shouldn't show
+                            plugin.taskManager.stopTask(event.getPlayer(), true);
                             return;
                         } else {
                             // current player doesnt own current chunk
@@ -51,13 +51,9 @@ public class PlayerMoved implements Listener {
                             plugin.hikariPool.logEntryDAO.insert(logEntry);
                         }
 
-                        event.getPlayer().sendActionBar(
-                            Component.text().color(TextColor.color(0xffffff))
-                                .append(Component.text(chunkX + " , " + chunkZ))
-                                .append(Component.text(" | This chunk is owned by "))
-                                .append(Component.text(ownedChunk.getName(), TextColor.color(0xffa631)))
-                                .append(Component.text("."))
-                        );
+                        plugin.taskManager.addTask(event.getPlayer(), ownedChunk.getName());
+                    } else {
+                        plugin.taskManager.stopTask(event.getPlayer(), true);
                     }
                 });
         }

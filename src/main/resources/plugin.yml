@@ -47,6 +47,10 @@ commands:
     description: Set player community.
     usage: /<command>
     permission: communa.admin
+  dimdump:
+    description: Dumps all dimensions with their UUIDs.
+    usage: /<command>
+    permission: communa.admin
   devspace:
     description: Flips a coin.
     usage: /<command>
