@@ -34,7 +34,13 @@ public class Profile implements CommandExecutor {
                 onlinePlayer != null ? onlinePlayer.getUniqueId().toString() : offlinePlayer.getUniqueId().toString();
 
             dev.zyplos.loungecommuna.database.POJOs.Player resultPlayer = resultPlayerList.get(0);
-            int communityId = resultPlayer.getCommunity_id();
+
+            int communityId;
+            if (resultPlayer.getCommunity_id() == 0) {
+                communityId = 99;
+            } else {
+                communityId = resultPlayer.getCommunity_id();
+            }
 
             Component tcCommunity = Component.text(" ○ " + plugin.utils.getCommunityName(communityId),
                 TextColor.fromCSSHexString(plugin.utils.getCommunityBrandColor(communityId)));
@@ -74,7 +80,7 @@ public class Profile implements CommandExecutor {
                     "⧈ " + numChunks + " " + (numChunks == 1 ? "chunk" : "chunks") + " claimed",
                     TextColor.color(0xc194fb));
 
-                final String playerUrl = "https://dev.lounge.haus/mc/player/" + parsedUUID;
+                final String playerUrl = "https://lounge.haus/mc/player/" + parsedName;
                 Component tcUrlPage = Component.text(
                     "⬈ View more details online", TextColor.color(0xa9c8fb))
                     .clickEvent(ClickEvent.openUrl(playerUrl))

@@ -18,10 +18,11 @@ public class Utils {
     public Map<Integer, String> communityNameMap = Map.of(
         1, "the lounge",
         2, "3 AM",
-        3, "pegg group",
-        4, "blaster group",
-        5, "jay group",
-        6, "vold group"
+        3, "MK7 Rock Rock Mountain",
+        4, "blaster's circle",
+        5, "The ultimate Minecraft fan club",
+        6, "vold group",
+        99, "?"
     );
     public Map<Integer, String> communityBrandColorMap = Map.of(
         1, "#ff3e3e",
@@ -29,7 +30,8 @@ public class Utils {
         3, "#0094ff",
         4, "#7c00ff",
         5, "#f1f353",
-        6, "#d8b01a"
+        6, "#d8b01a",
+        99, "#919191"
     );
 
     public Map<String, String> worldFriendlyNames = Map.of(

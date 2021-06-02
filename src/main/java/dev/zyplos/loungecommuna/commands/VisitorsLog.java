@@ -72,7 +72,8 @@ public class VisitorsLog implements CommandExecutor {
                             }
                         }
 
-                        final String chunkUrl = "https://dev.lounge.haus/mc/chunk/" + chunkX + "/" + chunkZ;
+                        final String chunkUrl = "https://lounge.haus/mc/chunk/" + chunkDimension + "/" + chunkX + "/" +
+                            chunkZ;
                         tcOutput.append(
                             Component.text(
                                 "⬈ View all entries online", TextColor.color(0xa9c8fb))
