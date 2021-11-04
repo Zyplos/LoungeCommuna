@@ -51,7 +51,9 @@ public class Help implements CommandExecutor {
                 .append(createCmdComponent("/home", "Tells you your home coordinates. " +
                     "Note: this does not teleport you."))
                 .append(createCmdComponent("/chunkinfo", "Show info about the chunk you're in."))
-                .append(createCmdComponent("/visitorslog", "See who recently entered your chunk."));
+                .append(createCmdComponent("/visitorslog", "See who recently entered your chunk."))
+                .append(createCmdComponent("/hidehome", "Hide home coords on your profile."))
+                .append(createCmdComponent("/showhome", "Show home coords on your profile"));
 
             player.sendMessage(tcHelp);
         }

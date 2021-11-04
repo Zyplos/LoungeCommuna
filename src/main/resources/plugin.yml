@@ -43,6 +43,14 @@ commands:
     description: Show who's recently visited your claim.
     usage: /<command>
     permission: communa.use
+  hidehome:
+    description: Hides your home coords on your profile.
+    usage: /<command>
+    permission: communa.use
+  showhome:
+    description: Shows your home coords on your profile.
+    usage: /<command>
+    permission: communa.use
   setcommunity:
     description: Set player community.
     usage: /<command>

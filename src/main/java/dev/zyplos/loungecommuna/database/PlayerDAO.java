@@ -25,7 +25,8 @@ public class PlayerDAO {
             @Override
             public void run() {
                 String sql = " SELECT BIN_TO_UUID(player_id) AS player_id, name, joined," +
-                    "community_id, home_x, home_y, home_z, BIN_TO_UUID(home_dimension) AS home_dimension " +
+                    "community_id, home_x, home_y, home_z, BIN_TO_UUID(home_dimension) AS home_dimension, " +
+                    "home_hidden " +
                     "FROM players WHERE name=:username";
                 try (Connection conn = dao.open()) {
                     List<Player> result = conn.createQuery(sql)
@@ -71,6 +72,38 @@ public class PlayerDAO {
                         .addParameter("y", y)
                         .addParameter("z", z)
                         .addParameter("dimensionUUID", dimensionUUID)
+                        .executeUpdate();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
+    public void hidePlayerHome(String playerUUID) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String sql = "UPDATE players " +
+                    "SET home_hidden=1 " +
+                    "WHERE player_id=UUID_TO_BIN(:playerUUID)";
+                try (Connection conn = dao.open()) {
+                    conn.createQuery(sql)
+                        .addParameter("playerUUID", playerUUID)
+                        .executeUpdate();
+                }
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
+    public void showPlayerHome(String playerUUID) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String sql = "UPDATE players " +
+                    "SET home_hidden=0 " +
+                    "WHERE player_id=UUID_TO_BIN(:playerUUID)";
+                try (Connection conn = dao.open()) {
+                    conn.createQuery(sql)
+                        .addParameter("playerUUID", playerUUID)
                         .executeUpdate();
                 }
             }

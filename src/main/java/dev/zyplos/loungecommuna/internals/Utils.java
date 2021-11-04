@@ -18,11 +18,11 @@ public class Utils {
     public Map<Integer, String> communityNameMap = Map.of(
         1, "the lounge",
         2, "3 AM",
-        3, "MK7 Rock Rock Mountain",
+        3, "3DS Rock Rock Mountain",
         4, "blaster's circle",
-        5, "The ultimate Minecraft fan club",
+        5, "The ultimate Yakuza fan club",
         6, "vold group",
-        99, "?"
+        99, "friend of friend"
     );
     public Map<Integer, String> communityBrandColorMap = Map.of(
         1, "#ff3e3e",
@@ -38,8 +38,9 @@ public class Utils {
         "world", "The Overworld",
         "world_nether", "The Nether",
         "world_the_end", "The End",
-        "aether", "The Aether",
-        "the_deep_dark", "The Deeper Dark"
+        "world_zydims_aether", "The Aether",
+        "the_deep_dark", "The Deeper Dark",
+        "aether", "The Aether"
     );
 
     // chat color palette

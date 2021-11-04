@@ -2,6 +2,7 @@ package dev.zyplos.loungecommuna.commands;
 
 import dev.zyplos.loungecommuna.LoungeCommuna;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.Command;
@@ -47,8 +48,9 @@ public class SetHome implements CommandExecutor {
             final Component tcPublicWarning =
                 plugin.utils.prefixedMessage().decorate(TextDecoration.ITALIC)
                     .append(Component.text("Heads up! ", TextColor.color(plugin.utils.colors.get("warning"))))
-                    .append(Component.text("Your home location is PUBLIC. Don't set it somewhere you want to keep " +
-                        "secret!"));
+                    .append(Component.text("Your home location is PUBLIC. Do "))
+                    .append(Component.text("/hidehome", NamedTextColor.GREEN))
+                    .append(Component.text(" to hide it from showing on your profile."));
             player.sendMessage(tcHome.append(Component.newline()).append(tcPublicWarning));
         }
         return true;

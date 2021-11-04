@@ -48,7 +48,12 @@ public class Profile implements CommandExecutor {
 
 
             Component tcHome;
-            if (resultPlayer.getHome_dimension() == null) {
+            if (resultPlayer.getHome_hidden()) {
+                tcHome = Component.text(
+                    "☗ Home hidden",
+                    TextColor.color(plugin.utils.colors.get("muted"))
+                );
+            } else if (resultPlayer.getHome_dimension() == null) {
                 tcHome = Component.text(
                     "☗ No home set",
                     TextColor.color(plugin.utils.colors.get("muted"))
@@ -62,6 +67,7 @@ public class Profile implements CommandExecutor {
                     TextColor.color(plugin.utils.colors.get("highlight"))
                 );
             }
+
 
             Component tcOnlineStatus;
             if (onlinePlayer != null) {

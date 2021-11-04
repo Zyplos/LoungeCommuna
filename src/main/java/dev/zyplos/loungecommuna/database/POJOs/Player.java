@@ -11,6 +11,7 @@ public class Player {
     private int home_y;
     private int home_z;
     private String home_dimension;
+    private boolean home_hidden;
 
     public String getPlayer_id() {
         return this.player_id;
@@ -74,5 +75,13 @@ public class Player {
 
     public void setHome_dimension(String home_dimension) {
         this.home_dimension = home_dimension;
+    }
+
+    public boolean getHome_hidden() {
+        return this.home_hidden;
+    }
+
+    public void setHome_hidden(boolean home_hidden) {
+        this.home_hidden = home_hidden;
     }
 }

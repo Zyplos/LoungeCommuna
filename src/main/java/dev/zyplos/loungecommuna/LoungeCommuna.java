@@ -33,6 +33,8 @@ public final class LoungeCommuna extends JavaPlugin {
         this.getCommand("help").setExecutor(new Help(this));
         this.getCommand("visitorslog").setExecutor(new VisitorsLog(this));
         this.getCommand("dimdump").setExecutor(new DimDump(this));
+        this.getCommand("hidehome").setExecutor(new HideHome(this));
+        this.getCommand("showhome").setExecutor(new ShowHome(this));
 
         getServer().getPluginManager().registerEvents(new PlayerJoined(this), this);
         getServer().getPluginManager().registerEvents(new PlayerMoved(this), this);
