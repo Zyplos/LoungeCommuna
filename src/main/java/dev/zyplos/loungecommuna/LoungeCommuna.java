@@ -17,6 +17,7 @@ public final class LoungeCommuna extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.saveDefaultConfig();
         hikariPool = new Hikari(this);
         utils = new Utils(this);
         taskManager = new ScrunchTaskManager(this);

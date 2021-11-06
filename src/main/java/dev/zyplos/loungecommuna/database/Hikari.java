@@ -3,7 +3,6 @@ package dev.zyplos.loungecommuna.database;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.zyplos.loungecommuna.LoungeCommuna;
-import io.github.cdimascio.dotenv.Dotenv;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,10 +15,9 @@ public class Hikari {
     public LogEntryDAO logEntryDAO;
 
     public Hikari(LoungeCommuna plugin) {
-        final Dotenv dotenv = Dotenv.load();
-        final String dbUsername = dotenv.get("DB_USERNAME");
-        final String dbPassword = dotenv.get("DB_PASSWORD");
-        final String dbUrl = dotenv.get("DB_URL");
+        final String dbUsername = plugin.getConfig().getString("db.username");
+        final String dbPassword = plugin.getConfig().getString("db.password");
+        final String dbUrl = plugin.getConfig().getString("db.url");
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(dbUrl);
