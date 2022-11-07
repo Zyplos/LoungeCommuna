@@ -11,6 +11,7 @@ import org.sql2o.Sql2oException;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.UUID;
 
 public class ChunkDAO {
     private final Sql2o dao;
@@ -22,14 +23,14 @@ public class ChunkDAO {
         dao = new Sql2o(ds);
     }
 
-    public void fetchByCoords(int xCoord, int zCoord, String dimensionUUID, AsyncCallback<List<Chunk>> callback) {
+    public void fetchByCoords(int xCoord, int zCoord, UUID dimensionUUID, AsyncCallback<List<Chunk>> callback) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String sql = "SELECT chunk_id, BIN_TO_UUID(player_id) AS player_id, name, claimed_on, x, z," +
-                    "BIN_TO_UUID(dimension) AS dimension " +
+                String sql = "SELECT chunk_id, player_id, name, claimed_on, x, z," +
+                    " dimension " +
                     "FROM chunks JOIN players USING (player_id) " +
-                    "WHERE x=:xCoord AND z=:zCoord AND dimension=UUID_TO_BIN(:dimensionUUID)";
+                    "WHERE x=:xCoord AND z=:zCoord AND dimension=:dimensionUUID";
                 try (Connection conn = dao.open()) {
                     List<Chunk> result = conn.createQuery(sql)
                         .addParameter("xCoord", xCoord)
@@ -48,14 +49,14 @@ public class ChunkDAO {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void fetchCountByUUID(String uuid, AsyncCallback<Integer> callback) {
+    public void fetchCountByUUID(UUID playerUUID, AsyncCallback<Integer> callback) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String sql = "SELECT COUNT(*) FROM chunks WHERE player_id=UUID_TO_BIN(:uuid)";
+                String sql = "SELECT COUNT(*) FROM chunks WHERE player_id=:playerUUID";
                 try (Connection conn = dao.open()) {
                     int result = conn.createQuery(sql)
-                        .addParameter("uuid", uuid)
+                        .addParameter("playerUUID", playerUUID)
                         .executeScalar(Integer.class);
 
                     new BukkitRunnable() {
@@ -69,13 +70,13 @@ public class ChunkDAO {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void deleteChunk(int x, int z, String dimensionUUID, String playerUUID) {
+    public void deleteChunk(int x, int z, UUID dimensionUUID, UUID playerUUID) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 String sql = "DELETE FROM chunks WHERE " +
-                    "x=:x AND z=:z AND dimension=UUID_TO_BIN(:dimensionUUID)" +
-                    "AND player_id=UUID_TO_BIN(:playerUUID)";
+                    "x=:x AND z=:z AND dimension=:dimensionUUID " +
+                    "AND player_id=:playerUUID";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql)
                         .addParameter("x", x)
@@ -92,8 +93,8 @@ public class ChunkDAO {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String sql = "INSERT INTO chunks(player_id, claimed_on, x, z, dimension) VALUES ( UUID_TO_BIN(:player_id), " +
-                    ":claimed_on, :x, :z, UUID_TO_BIN(:dimension))";
+                String sql = "INSERT INTO chunks(player_id, claimed_on, x, z, dimension) VALUES ( :player_id, " +
+                    ":claimed_on, :x, :z, :dimension)";
 
                 try (Connection conn = dao.beginTransaction()) {
                     try {

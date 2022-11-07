@@ -26,7 +26,7 @@ public class HideHome implements CommandExecutor {
             player.sendMessage(tcHome);
 
             plugin.hikariPool.playerDAO.hidePlayerHome(
-                player.getUniqueId().toString()
+                player.getUniqueId()
             );
         }
         return true;

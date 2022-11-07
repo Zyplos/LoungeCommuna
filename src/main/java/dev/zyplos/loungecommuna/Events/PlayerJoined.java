@@ -25,14 +25,13 @@ public class PlayerJoined implements Listener {
         String playerName = event.getPlayer().getName();
 
         Player player = new Player();
-        player.setPlayer_id(event.getPlayer().getUniqueId().toString());
+        player.setPlayer_id(event.getPlayer().getUniqueId());
         player.setName(playerName);
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         player.setJoined(timestamp);
 
         plugin.hikariPool.playerDAO.insert(player);
-
         
         event.joinMessage(
             Component.text("").color(TextColor.color(NamedTextColor.YELLOW))

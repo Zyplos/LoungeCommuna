@@ -29,11 +29,11 @@ public class SetHome implements CommandExecutor {
             int z = player.getLocation().getBlockZ();
 
             plugin.hikariPool.playerDAO.updatePlayerHome(
-                player.getUniqueId().toString(),
+                player.getUniqueId(),
                 x,
                 y,
                 z,
-                player.getWorld().getUID().toString()
+                player.getWorld().getUID()
             );
 
             final Component tcHome = plugin.utils.prefixedMessage()

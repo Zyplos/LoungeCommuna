@@ -15,6 +15,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class VisitorsLog implements CommandExecutor {
     private final LoungeCommuna plugin;
 
@@ -29,7 +31,7 @@ public class VisitorsLog implements CommandExecutor {
 
             int chunkX = player.getChunk().getX();
             int chunkZ = player.getChunk().getZ();
-            String chunkDimension = player.getWorld().getUID().toString();
+            UUID chunkDimension = player.getWorld().getUID();
 
             plugin.hikariPool.chunkDAO.fetchByCoords(chunkX, chunkZ, chunkDimension, chunkOwnerInfo -> {
                 if (!chunkOwnerInfo.isEmpty()) {
@@ -76,7 +78,7 @@ public class VisitorsLog implements CommandExecutor {
                             chunkZ;
                         tcOutput.append(
                             Component.text(
-                                "⬈ View all entries online", TextColor.color(0xa9c8fb))
+                                    "⬈ View all entries online", TextColor.color(0xa9c8fb))
                                 .clickEvent(ClickEvent.openUrl(chunkUrl))
                                 .hoverEvent(HoverEvent.showText(Component.text("Open URL")))
                         );

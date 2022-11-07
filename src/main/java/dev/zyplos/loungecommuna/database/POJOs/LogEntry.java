@@ -1,12 +1,13 @@
 package dev.zyplos.loungecommuna.database.POJOs;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class LogEntry {
     private int x;
     private int z;
-    private String dimension;
-    private String player_id;
+    private UUID dimension;
+    private UUID player_id;
     private String name;
     private Timestamp entered_time;
 
@@ -26,19 +27,19 @@ public class LogEntry {
         this.z = z;
     }
 
-    public String getDimension() {
+    public UUID getDimension() {
         return this.dimension;
     }
 
-    public void setDimension(String dimension) {
+    public void setDimension(UUID dimension) {
         this.dimension = dimension;
     }
 
-    public String getPlayer_id() {
+    public UUID getPlayer_id() {
         return this.player_id;
     }
 
-    public void setPlayer_id(String player_id) {
+    public void setPlayer_id(UUID player_id) {
         this.player_id = player_id;
     }
 

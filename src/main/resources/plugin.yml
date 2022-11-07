@@ -6,6 +6,8 @@ prefix: Communa
 author: Zyplos
 description: Simple land claims plugin.
 website: https://lounge.haus
+depend:
+  - BlueMap
 commands:
   claim:
     description: Claim the chunk you are in.

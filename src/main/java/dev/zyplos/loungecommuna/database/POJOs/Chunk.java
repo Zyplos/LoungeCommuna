@@ -1,15 +1,16 @@
 package dev.zyplos.loungecommuna.database.POJOs;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class Chunk {
     private int chunk_id;
-    private String player_id;
+    private UUID player_id;
     private String name;
     private Timestamp claimed_on;
     int x;
     int z;
-    private String dimension;
+    private UUID dimension;
 
     public int getChunk_id() {
         return this.chunk_id;
@@ -19,11 +20,11 @@ public class Chunk {
         this.chunk_id = id;
     }
 
-    public String getPlayer_id() {
+    public UUID getPlayer_id() {
         return this.player_id;
     }
 
-    public void setPlayer_id(String player_id) {
+    public void setPlayer_id(UUID player_id) {
         this.player_id = player_id;
     }
 
@@ -59,11 +60,11 @@ public class Chunk {
         this.z = z;
     }
 
-    public String getDimension() {
+    public UUID getDimension() {
         return this.dimension;
     }
 
-    public void setDimension(String dimension) {
+    public void setDimension(UUID dimension) {
         this.dimension = dimension;
     }
 

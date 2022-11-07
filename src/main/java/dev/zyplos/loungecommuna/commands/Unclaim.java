@@ -23,7 +23,7 @@ public class Unclaim implements CommandExecutor {
             Player player = (Player) sender;
 
             plugin.hikariPool.chunkDAO.fetchByCoords(player.getLocation().getChunk().getX(),
-                player.getLocation().getChunk().getZ(), player.getWorld().getUID().toString(), chunkOwnerInfo -> {
+                player.getLocation().getChunk().getZ(), player.getWorld().getUID(), chunkOwnerInfo -> {
                     if (chunkOwnerInfo.isEmpty()) {
                         player.sendMessage(
                             plugin.utils.prefixedMessage().append(
@@ -41,8 +41,8 @@ public class Unclaim implements CommandExecutor {
                         plugin.hikariPool.chunkDAO.deleteChunk(
                             player.getLocation().getChunk().getX(),
                             player.getLocation().getChunk().getZ(),
-                            player.getWorld().getUID().toString(),
-                            player.getUniqueId().toString()
+                            player.getWorld().getUID(),
+                            player.getUniqueId()
                         );
                         // player owns chunk and chunk is in the same dimension
                         player.sendMessage(

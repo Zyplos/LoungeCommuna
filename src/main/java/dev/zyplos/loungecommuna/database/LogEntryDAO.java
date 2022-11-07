@@ -10,6 +10,7 @@ import org.sql2o.Sql2o;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.UUID;
 
 public class LogEntryDAO {
     private final Sql2o dao;
@@ -26,7 +27,7 @@ public class LogEntryDAO {
             @Override
             public void run() {
                 String sql = "INSERT INTO logentries(x, z, dimension, player_id, entered_time) " +
-                    "VALUES (:x, :z, UUID_TO_BIN(:dimension), UUID_TO_BIN(:player_id), :entered_time)";
+                    "VALUES (:x, :z, :dimension, :player_id, :entered_time)";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql).bind(logEntry).executeUpdate();
                 }
@@ -34,14 +35,14 @@ public class LogEntryDAO {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void fetchByCoords(int x, int z, String dimensionUUID, AsyncCallback<List<LogEntry>> callback) {
+    public void fetchByCoords(int x, int z, UUID dimensionUUID, AsyncCallback<List<LogEntry>> callback) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 String sql = "SELECT " +
-                    "x, z, BIN_TO_UUID(dimension) AS dimension, BIN_TO_UUID(player_id) AS player_id, name, entered_time" +
+                    "x, z, dimension, player_id, name, entered_time" +
                     " FROM logentries JOIN players USING (player_id)" +
-                    "WHERE x=:x AND z=:z AND dimension=UUID_TO_BIN(:dimensionUUID)" +
+                    "WHERE x=:x AND z=:z AND dimension=:dimensionUUID " +
                     "ORDER BY id DESC LIMIT 5";
                 try (Connection conn = dao.open()) {
                     List<LogEntry> result = conn.createQuery(sql)

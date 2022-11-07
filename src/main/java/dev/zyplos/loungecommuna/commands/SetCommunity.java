@@ -59,7 +59,7 @@ public class SetCommunity implements CommandExecutor {
             }
 
             plugin.hikariPool.playerDAO.updatePlayerCommunity(
-                selectedPlayer.getUniqueId().toString(),
+                selectedPlayer.getUniqueId(),
                 communityId
             );
 

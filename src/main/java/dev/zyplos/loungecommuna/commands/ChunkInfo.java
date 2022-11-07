@@ -6,7 +6,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.apache.commons.lang.time.DurationFormatUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,7 +26,7 @@ public class ChunkInfo implements CommandExecutor {
             Player player = (Player) sender;
 
             plugin.hikariPool.chunkDAO.fetchByCoords(player.getChunk().getX(),
-                player.getChunk().getZ(), player.getWorld().getUID().toString(), chunkOwnerInfo -> {
+                player.getChunk().getZ(), player.getWorld().getUID(), chunkOwnerInfo -> {
                     if (!chunkOwnerInfo.isEmpty()) {
                         String claimedString = DurationFormatUtils.formatPeriod(
                             chunkOwnerInfo.get(0).getClaimed_on().getTime(),
@@ -42,7 +42,7 @@ public class ChunkInfo implements CommandExecutor {
                                 .append(Component.text(claimedString, TextColor.color(0xffa631)))
                                 .append(Component.text(" ago. "))
                                 .append(Component.text(
-                                    "Click here", TextColor.color(0xa9c8fb))
+                                        "Click here", TextColor.color(0xa9c8fb))
                                     .clickEvent(ClickEvent.runCommand("/profile " + chunkOwnerInfo.get(0).getName()))
                                     .hoverEvent(HoverEvent.showText(Component.text("Show " + chunkOwnerInfo.get(0).getName() + "'s profile")))
                                 )

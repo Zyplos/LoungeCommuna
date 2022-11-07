@@ -7,6 +7,7 @@ import dev.zyplos.loungecommuna.LoungeCommuna;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class Hikari {
     private HikariDataSource ds;
@@ -17,15 +18,19 @@ public class Hikari {
     public Hikari(LoungeCommuna plugin) {
         final String dbUsername = plugin.getConfig().getString("db.username");
         final String dbPassword = plugin.getConfig().getString("db.password");
+        final String dbName = plugin.getConfig().getString("db.database");
+        final String dbHostname = plugin.getConfig().getString("db.hostname");
         final String dbUrl = plugin.getConfig().getString("db.url");
 
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(dbUrl);
-        config.setUsername(dbUsername);
-        config.setPassword(dbPassword);
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        Properties props = new Properties();
+        props.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource");
+        props.setProperty("dataSource.user", dbUsername);
+        props.setProperty("dataSource.password", dbPassword);
+        props.setProperty("dataSource.databaseName", dbName);
+        props.setProperty("dataSource.serverName", dbHostname);
+
+        HikariConfig config = new HikariConfig(props);
+
         ds = new HikariDataSource(config);
 
         playerDAO = new PlayerDAO(ds, plugin);
@@ -35,6 +40,10 @@ public class Hikari {
 
     public DataSource getDataSource() {
         return ds;
+    }
+
+    public void closeConnection() {
+        ds.close();
     }
 
     public Connection getConnection() throws SQLException {

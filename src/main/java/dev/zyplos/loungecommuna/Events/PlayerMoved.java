@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class PlayerMoved implements Listener {
     private final LoungeCommuna plugin;
@@ -18,15 +19,14 @@ public class PlayerMoved implements Listener {
 
     @EventHandler
     public void onPlayerMoved(PlayerMoveEvent event) {
-
         // detects if player changed chunk
         if (
             !event.getFrom().getChunk().equals(event.getTo().getChunk())
         ) {
             int chunkX = event.getTo().getChunk().getX();
             int chunkZ = event.getTo().getChunk().getZ();
-            String chunkDimension = event.getTo().getWorld().getUID().toString();
-            String playerUUID = event.getPlayer().getUniqueId().toString();
+            UUID chunkDimension = event.getTo().getWorld().getUID();
+            UUID playerUUID = event.getPlayer().getUniqueId();
 
             plugin.hikariPool.chunkDAO.fetchByCoords(chunkX,
                 chunkZ, chunkDimension, chunkOwnerInfo -> {

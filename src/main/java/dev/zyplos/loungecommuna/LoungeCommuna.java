@@ -1,5 +1,7 @@
 package dev.zyplos.loungecommuna;
 
+import de.bluecolored.bluemap.api.BlueMapAPI;
+import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import dev.zyplos.loungecommuna.Events.PlayerJoined;
 import dev.zyplos.loungecommuna.Events.PlayerLeft;
 import dev.zyplos.loungecommuna.Events.PlayerMoved;
@@ -10,17 +12,28 @@ import dev.zyplos.loungecommuna.internals.ScrunchTaskManager;
 import dev.zyplos.loungecommuna.internals.Utils;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 public final class LoungeCommuna extends JavaPlugin {
     public Hikari hikariPool;
     public Utils utils;
     public ScrunchTaskManager taskManager;
+    public MarkerAPI markerApi;
 
     @Override
     public void onEnable() {
         this.saveDefaultConfig();
+
         hikariPool = new Hikari(this);
         utils = new Utils(this);
         taskManager = new ScrunchTaskManager(this);
+        BlueMapAPI.onEnable(api -> {
+            try {
+                markerApi = api.getMarkerAPI();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         this.getCommand("claim").setExecutor(new Claim(this));
         this.getCommand("devspace").setExecutor(new devspace(this));
@@ -46,6 +59,7 @@ public final class LoungeCommuna extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        hikariPool.closeConnection();
         getLogger().info("Disabled.");
     }
 }

@@ -9,6 +9,7 @@ import org.sql2o.Sql2o;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.UUID;
 
 public class PlayerDAO {
     private final Sql2o dao;
@@ -24,8 +25,8 @@ public class PlayerDAO {
         new BukkitRunnable() {
             @Override
             public void run() {
-                String sql = " SELECT BIN_TO_UUID(player_id) AS player_id, name, joined," +
-                    "community_id, home_x, home_y, home_z, BIN_TO_UUID(home_dimension) AS home_dimension, " +
+                String sql = " SELECT player_id, name, joined, " +
+                    "community_id, home_x, home_y, home_z, home_dimension, " +
                     "home_hidden " +
                     "FROM players WHERE name=:username";
                 try (Connection conn = dao.open()) {
@@ -49,8 +50,8 @@ public class PlayerDAO {
             @Override
             public void run() {
                 String sql = "INSERT INTO players(player_id, name, joined) " +
-                    "VALUES ( UUID_TO_BIN(:player_id), :name, :joined ) " +
-                    "ON DUPLICATE KEY UPDATE name=:name";
+                    "VALUES (:player_id, :name, :joined ) " +
+                    "ON CONFLICT (player_id) DO UPDATE SET name=:name";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql).bind(player).executeUpdate();
                 }
@@ -58,13 +59,13 @@ public class PlayerDAO {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void updatePlayerHome(String playerUUID, int x, int y, int z, String dimensionUUID) {
+    public void updatePlayerHome(UUID playerUUID, int x, int y, int z, UUID dimensionUUID) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 String sql = "UPDATE players " +
-                    "SET home_x=:x, home_y=:y, home_z=:z, home_dimension=UUID_TO_BIN(:dimensionUUID) " +
-                    "WHERE player_id=UUID_TO_BIN(:playerUUID)";
+                    "SET home_x=:x, home_y=:y, home_z=:z, home_dimension=:dimensionUUID " +
+                    "WHERE player_id=:playerUUID";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql)
                         .addParameter("playerUUID", playerUUID)
@@ -78,13 +79,13 @@ public class PlayerDAO {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void hidePlayerHome(String playerUUID) {
+    public void hidePlayerHome(UUID playerUUID) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 String sql = "UPDATE players " +
-                    "SET home_hidden=1 " +
-                    "WHERE player_id=UUID_TO_BIN(:playerUUID)";
+                    "SET home_hidden=true " +
+                    "WHERE player_id=:playerUUID";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql)
                         .addParameter("playerUUID", playerUUID)
@@ -94,13 +95,13 @@ public class PlayerDAO {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void showPlayerHome(String playerUUID) {
+    public void showPlayerHome(UUID playerUUID) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 String sql = "UPDATE players " +
-                    "SET home_hidden=0 " +
-                    "WHERE player_id=UUID_TO_BIN(:playerUUID)";
+                    "SET home_hidden=false " +
+                    "WHERE player_id=:playerUUID";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql)
                         .addParameter("playerUUID", playerUUID)
@@ -110,13 +111,13 @@ public class PlayerDAO {
         }.runTaskAsynchronously(plugin);
     }
 
-    public void updatePlayerCommunity(String playerUUID, int communityId) {
+    public void updatePlayerCommunity(UUID playerUUID, int communityId) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 String sql = "UPDATE players " +
                     "SET community_id=:communityId " +
-                    "WHERE player_id=UUID_TO_BIN(:playerUUID)";
+                    "WHERE player_id=:playerUUID";
                 try (Connection conn = dao.open()) {
                     conn.createQuery(sql)
                         .addParameter("communityId", communityId)

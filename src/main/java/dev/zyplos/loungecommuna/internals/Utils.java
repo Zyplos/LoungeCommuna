@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.UUID;
 
 public class Utils {
     private final LoungeCommuna plugin;
@@ -74,12 +75,12 @@ public class Utils {
         return Component.text(msg, TextColor.color(0xfa947d)).asComponent();
     }
 
-    public void getPlayerHeadImage(String parsedUUID, AsyncCallback<BufferedImage> callback) {
+    public void getPlayerHeadImage(UUID parsedUUID, AsyncCallback<BufferedImage> callback) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("https://crafatar.com/avatars/" + parsedUUID + ".png?size=8&overlay");
+                    URL url = new URL("https://crafatar.com/avatars/" + parsedUUID.toString() + ".png?size=8&overlay");
                     BufferedImage image = ImageIO.read(url);
 
                     new BukkitRunnable() {

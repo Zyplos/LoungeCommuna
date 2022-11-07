@@ -26,7 +26,7 @@ public class ShowHome implements CommandExecutor {
             player.sendMessage(tcHome);
 
             plugin.hikariPool.playerDAO.showPlayerHome(
-                player.getUniqueId().toString()
+                player.getUniqueId()
             );
         }
         return true;

@@ -6,7 +6,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
-import org.apache.commons.lang.time.DurationFormatUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -30,8 +30,8 @@ public class Profile implements CommandExecutor {
                                    Player onlinePlayer, OfflinePlayer offlinePlayer) {
 
         plugin.hikariPool.playerDAO.fetchByName(parsedName, resultPlayerList -> {
-            String parsedUUID =
-                onlinePlayer != null ? onlinePlayer.getUniqueId().toString() : offlinePlayer.getUniqueId().toString();
+            UUID parsedUUID =
+                onlinePlayer != null ? onlinePlayer.getUniqueId() : offlinePlayer.getUniqueId();
 
             dev.zyplos.loungecommuna.database.POJOs.Player resultPlayer = resultPlayerList.get(0);
 
@@ -44,7 +44,7 @@ public class Profile implements CommandExecutor {
 
             Component tcCommunity = Component.text(" ○ " + plugin.utils.getCommunityName(communityId),
                 TextColor.fromCSSHexString(plugin.utils.getCommunityBrandColor(communityId)));
-            Component tcName = Component.text(parsedName, TextColor.color(0xffffff)).append(tcCommunity);
+            Component tcName = Component.text(parsedName, TextColor.color(0xffffff));
 
 
             Component tcHome;
@@ -88,7 +88,7 @@ public class Profile implements CommandExecutor {
 
                 final String playerUrl = "https://lounge.haus/mc/player/" + parsedName;
                 Component tcUrlPage = Component.text(
-                    "⬈ View more details online", TextColor.color(0xa9c8fb))
+                        "⬈ View more details online", TextColor.color(0xa9c8fb))
                     .clickEvent(ClickEvent.openUrl(playerUrl))
                     .hoverEvent(HoverEvent.showText(Component.text("Open URL")));
 
@@ -96,7 +96,9 @@ public class Profile implements CommandExecutor {
                 plugin.utils.getPlayerHeadImage(parsedUUID, image -> {
                     if (image == null) {
                         TextComponent output = Component.text().append(
-                            tcName,
+                            tcCommunity,
+                            Component.newline(),
+                            tcCommunity,
                             Component.newline(),
                             tcHome,
                             Component.newline(),
@@ -181,7 +183,7 @@ public class Profile implements CommandExecutor {
                         return;
                     }
 
-                    UUID uid = UUID.fromString(playerFromDb.get(0).getPlayer_id());
+                    UUID uid = playerFromDb.get(0).getPlayer_id();
                     OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(uid);
                     String parsedName = playerFromDb.get(0).getName();
                     sendPlayerProfile(senderPlayer, parsedName, null, offlinePlayer);

@@ -1,9 +1,10 @@
 package dev.zyplos.loungecommuna.database.POJOs;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class Player {
-    private String player_id;
+    private UUID player_id;
     private String name;
     private Timestamp joined;
     private int community_id;
@@ -13,11 +14,11 @@ public class Player {
     private String home_dimension;
     private boolean home_hidden;
 
-    public String getPlayer_id() {
+    public UUID getPlayer_id() {
         return this.player_id;
     }
 
-    public void setPlayer_id(String player_id) {
+    public void setPlayer_id(UUID player_id) {
         this.player_id = player_id;
     }
 

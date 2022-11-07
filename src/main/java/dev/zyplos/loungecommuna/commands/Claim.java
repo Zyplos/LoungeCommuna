@@ -31,11 +31,11 @@ public class Claim implements CommandExecutor {
 
             dev.zyplos.loungecommuna.database.POJOs.Chunk newClaim = new dev.zyplos.loungecommuna.database.POJOs.Chunk();
             newClaim.setChunk_id(137);
-            newClaim.setPlayer_id(player.getUniqueId().toString());
+            newClaim.setPlayer_id(player.getUniqueId());
             newClaim.setClaimed_on(new Timestamp(System.currentTimeMillis()));
             newClaim.setX(chunkX);
             newClaim.setZ(chunkZ);
-            newClaim.setDimension(player.getWorld().getUID().toString());
+            newClaim.setDimension(player.getWorld().getUID());
 
             plugin.hikariPool.chunkDAO.insert(newClaim, result -> {
                 if (result == null) {
