@@ -1,7 +1,7 @@
 name: LoungeCommuna
 version: ${project.version}
 main: dev.zyplos.loungecommuna.LoungeCommuna
-api-version: 1.16
+api-version: "1.20"
 prefix: Communa
 author: Zyplos
 description: Simple land claims plugin.
